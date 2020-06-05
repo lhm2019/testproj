@@ -2,7 +2,7 @@
 	<el-row>
 		<el-col>
 			
-			<el-form status-icon label-width="80px" :rules="rules" :model="form">
+			<el-form status-icon label-width="80px" :rules="rules" ref="form" :model="form">
 				<el-form-item prop="name">
 					<el-input placeholder="请输入用户名" v-model="form.name"  ><i slot="prefix" class="el-icon-user-solid"></i></el-input>
 				</el-form-item>
@@ -12,7 +12,7 @@
 				</el-form-item>
 				<el-form-item>
 					
-					<el-button type="primary" @click="onSubmit()" v-model="form.password">登录</el-button>
+					<el-button type="primary" @click="onSubmit('form')" v-model="form.password">登录</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -43,9 +43,16 @@
 			
 		},
 		methods:{
-			onSubmit(){
-				console.log(this.form.name)
-				console.log(this.form.password)
+			onSubmit(form){
+				
+				
+				this.$refs[form].validate((valid)=>{
+					if(valid){
+						alert("提交成功")
+					}else{
+						alert("提交错误")
+					}
+				})
 			}
 		}
 	}
