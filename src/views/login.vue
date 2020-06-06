@@ -3,8 +3,8 @@
 		<el-col>
 			
 			<el-form status-icon label-width="80px" :rules="rules" ref="form" :model="form">
-				<el-form-item prop="name">
-					<el-input placeholder="请输入用户名" v-model="form.name"  ><i slot="prefix" class="el-icon-user-solid"></i></el-input>
+				<el-form-item prop="username">
+					<el-input placeholder="请输入用户名" v-model="form.username"  ><i slot="prefix" class="el-icon-user-solid"></i></el-input>
 				</el-form-item>
 				<el-form-item prop="password">
 					
@@ -12,7 +12,7 @@
 				</el-form-item>
 				<el-form-item>
 					
-					<el-button type="primary" @click="onSubmit('form')" v-model="form.password">登录</el-button>
+					<el-button type="primary" @click="onSubmit('form')" >登录</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -21,18 +21,21 @@
 </template>
 
 <script>
+	import axios from 'axios'
 	import {getRequest} from '../network/getRequest.js'
+	import {postRequest} from '../network/postRequest.js'
+	import qs from 'qs'
 	export default{
 		name:'login',
 		
 		data(){
 			return{
 				form:{
-					name:'',
+					username:'',
 					password:''
 				},
 				rules:{
-					name:[{required: true, message:'请输入用户名或邮箱', trigger:'blur'},
+					username:[{required: true, message:'请输入用户名或邮箱', trigger:'blur'},
 						  { min: 3, max: 10,message: '长度在 3 到 10 个字符', trigger: 'blur' }
 					],
 					password:[{required:true, message:'请输入密码', trigger:'blur'},
@@ -48,9 +51,17 @@
 				
 				this.$refs[form].validate((valid)=>{
 					if(valid){
-						alert("提交成功")
+						
+						const config={url:'Blog/user/login',data:qs.stringify(this.form)}
+						postRequest(config).then(res=>{
+							console.log(res);
+							
+						}).catch(error=>{
+							console.log(error)
+						})
 					}else{
-						alert("提交错误")
+						// alert("提交错误")
+						return false;
 					}
 				})
 			}
